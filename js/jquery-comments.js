@@ -79,6 +79,7 @@
 
             // Other actions
             'click li.comment button.upvote' : 'upvoteComment',
+            'click li.comment button.downvote' : 'downvoteComment',
             'click li.comment button.delete.enabled' : 'deleteComment',
             'click li.comment .hashtag' : 'hashtagClicked',
             'click li.comment .ping' : 'pingClicked',
@@ -120,6 +121,7 @@
                 // Font awesome icon overrides        
                 spinnerIconURL: '',
                 upvoteIconURL: '',
+                downvoteIconURL: '',
                 replyIconURL: '',
                 uploadIconURL: '',
                 attachmentIconURL: '',
@@ -151,6 +153,7 @@
                 enableReplying: true,
                 enableEditing: true,
                 enableUpvoting: true,
+                enableDownvoting: true,
                 enableDeleting: true,
                 enableAttachments: false,
                 enableHashtags: false,
@@ -191,7 +194,9 @@
                     createdByAdmin: 'created_by_admin',
                     createdByCurrentUser: 'created_by_current_user',
                     upvoteCount: 'upvote_count',
-                    userHasUpvoted: 'user_has_upvoted'
+                    userHasUpvoted: 'user_has_upvoted',
+                    downvoteCount: 'downvote_count',
+                    userHasDownvoted: 'user_has_downvoted'
                 },
                 
                 getUsers: function(success, error) {success([])},
@@ -200,6 +205,9 @@
                 putComment: function(commentJSON, success, error) {success(commentJSON)},
                 deleteComment: function(commentJSON, success, error) {success()},
                 upvoteComment: function(commentJSON, success, error) {success(commentJSON)},
+
+
+                downvoteComment: function (commentJSON, success, error) { success(commentJSON)},
                 hashtagClicked: function(hashtag) {},
                 pingClicked: function(userId) {},
                 uploadAttachments: function(commentArray, success, error) {success(commentArray)},
@@ -689,7 +697,17 @@
             }
         },
 
-        sortAndReArrangeComments: function(sortKey) {
+        sortUsers: function (users) {
+            users.sort(function (a, b) {
+                var nameA = a.fullname.toLowerCase().trim();
+                var nameB = b.fullname.toLowerCase().trim();
+                if (nameA < nameB) return -1;
+                if (nameA > nameB) return 1;
+                return 0;
+            });
+        },
+
+        sortAndReArrangeComments: function (sortKey) {
             var commentList = this.$el.find('#comment-list');
 
             // Get main level comments
@@ -971,6 +989,7 @@
             var success = function() {
                 self.removeComment(commentId);
                 if(parentId) self.reRenderCommentActionBar(parentId);
+                return self.commentsById;
             };
 
             var error = function() {
@@ -1038,7 +1057,47 @@
             this.options.upvoteComment(commentJSON, success, error);
         },
 
-        toggleReplies: function(ev) {
+        downvoteComment: function (ev) {
+            var self = this;
+            var commentEl = $(ev.currentTarget).parents('li.comment').first();
+            var commentModel = commentEl.data().model;
+
+            // Check whether user downvoted the comment or revoked the downvote
+            var previousDownvoteCount = commentModel.downvoteCount;
+            var newDownvoteCount;
+            if (commentModel.userHasDownvoted) {
+                newDownvoteCount = previousDownvoteCount - 1;
+            } else {
+                newDownvoteCount = previousDownvoteCount + 1;
+            }
+
+            // Show changes immediatelly
+            commentModel.userHasDownvoted = !commentModel.userHasDownvoted;
+            commentModel.downvoteCount = newDownvoteCount;
+            this.reRenderDownvotes(commentModel.id);
+
+            // Reverse mapping
+            var commentJSON = $.extend({}, commentModel);
+            commentJSON = this.applyExternalMappings(commentJSON);
+
+            var success = function (commentJSON) {
+                var commentModel = self.createCommentModel(commentJSON);
+                self.updateCommentModel(commentModel);
+                self.reRenderDownvotes(commentModel.id);
+            };
+
+            var error = function () {
+
+                // Revert changes
+                commentModel.userHasDownvoted = !commentModel.userHasDownvoted;
+                commentModel.downvoteCount = previousDownvoteCount;
+                self.reRenderDownvotes(commentModel.id);
+            };
+
+            this.options.downvoteComment(commentJSON, success, error);
+        },
+
+        toggleReplies: function (ev) {
             var el = $(ev.currentTarget);
             el.siblings('.hidden-reply').toggleClass('visible');
             this.setToggleAllButtonText(el, true);
@@ -1247,7 +1306,7 @@
                 });
 
                 var uploadIcon = $('<i/>', {
-                    'class': 'fa fa-paperclip fa-4x'
+                    'class': 'fa fa-upload fa-4x'
                 });
                 if(this.options.uploadIconURL.length) {
                     uploadIcon.css('background-image', 'url("'+this.options.uploadIconURL+'")');
@@ -1349,7 +1408,7 @@
                         'class': 'enabled upload'
                     });
                     var uploadIcon = $('<i/>', {
-                        'class': 'fa fa-paperclip'
+                        'class': 'fa fa-upload'
                     });
                     var fileInput = $('<input/>', {
                         type: 'file',
@@ -1420,14 +1479,8 @@
                             return !isSelf && !alreadyPinged;
                         });
 
-                        // Sort users alphabetically
-                        users.sort(function(a,b) {
-                            var nameA = a.fullname.toLowerCase().trim();
-                            var nameB = b.fullname.toLowerCase().trim();
-                            if(nameA < nameB) return -1;
-                            if(nameA > nameB) return 1;
-                            return 0;
-                        });
+                        // Sort users
+                        self.sortUsers(users);
 
                         // Filter users by search term
                         callback($.map(users, function (user) {
@@ -1775,7 +1828,16 @@
                     });
                     link.html(video);
 
-                // Case: icon and text
+                    // Case: audio preview
+                } else if (type == 'audio') {
+                    var audio = $('<audio/>', {
+                        src: commentModel.fileURL,
+                        type: commentModel.fileMimeType,
+                        controls: 'controls'
+                    });
+                    link.html(audio);
+
+                    // Case: icon and text
                 } else {
 
                     // Icon
@@ -1854,9 +1916,22 @@
             // Upvotes
             var upvotes = this.createUpvoteElement(commentModel);
 
+            // Downvote icon
+            var downvoteIcon = $('<i/>', {
+                'class': 'fa fa-thumbs-down'
+            });
+            if (this.options.downvoteIconURL.length) {
+                downvoteIcon.css('background-image', 'url("' + this.options.downvoteIconURL + '")');
+                downvoteIcon.addClass('image');
+            }
+
+            // Downvotes
+            var downvotes = this.createDownvoteElement(commentModel);
+
             // Append buttons for actions that are enabled
             if(this.options.enableReplying) actions.append(reply);
             if(this.options.enableUpvoting) actions.append(upvotes);
+            if(this.options.enableDownvoting) actions.append(downvotes);
 
             if(commentModel.createdByCurrentUser || this.options.currentUserIsAdmin) {
 
@@ -1912,7 +1987,28 @@
             return upvoteEl;
         },
 
-        createTagElement: function(text, extraClasses, value) {
+        createDownvoteElement: function (commentModel) {
+            // Downvote icon
+            var downvoteIcon = $('<i/>', {
+                'class': 'fa fa-thumbs-down'
+            });
+            if (this.options.downvoteIconURL.length) {
+                downvoteIcon.css('background-image', 'url("' + this.options.downvoteIconURL + '")');
+                downvoteIcon.addClass('image');
+            }
+
+            // Downvotes
+            var downvoteEl = $('<button/>', {
+                'class': 'action downvote' + (commentModel.userHasDownvoted ? ' red-highlight-font' : '')
+            }).append($('<span/>', {
+                text: commentModel.downvoteCount,
+                'class': 'downvote-count'
+            })).append(downvoteIcon);
+
+            return downvoteEl;
+        },
+
+        createTagElement: function (text, extraClasses, value) {
             var tagEl = $('<input/>', {
                 'class': 'tag',
                 'type': 'button',
@@ -1957,6 +2053,16 @@
             });
         },
 
+        reRenderDownvotes: function (id) {
+            var commentModel = this.commentsById[id];
+            var commentElements = this.$el.find('li.comment[data-id="' + commentModel.id + '"]');
+
+            var self = this;
+            commentElements.each(function (index, commentEl) {
+                var downvotes = self.createDownvoteElement(commentModel);
+                $(commentEl).find('.downvote').first().replaceWith(downvotes);
+            });
+        },
 
         // Styling
         // =======
@@ -1988,7 +2094,16 @@
             this.createCss('.jquery-comments .highlight-font-bold {color: '
                 + this.options.highlightColor + ' !important;'
                 + 'font-weight: bold;'
-                +'}');
+                + '}');
+
+            // Font red highlight
+            this.createCss('.jquery-comments .red-highlight-font {color: '
+                + this.options.deleteButtonColor + ' !important;'
+                + '}');
+            this.createCss('.jquery-comments .red-highlight-font-bold {color: '
+                + this.options.deleteButtonColor + ' !important;'
+                + 'font-weight: bold;'
+                + '}');
         },
 
         createCss: function(css) {
@@ -2044,7 +2159,9 @@
                 profilePictureURL: this.options.profilePictureURL,
                 createdByCurrentUser: true,
                 upvoteCount: 0,
-                userHasUpvoted: false
+                downvoteCount: 0,
+                userHasUpvoted: false,
+                userHasDownvoted: false
             };
             return commentJSON;
         },
