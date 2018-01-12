@@ -1044,6 +1044,10 @@
                 var commentModel = self.createCommentModel(commentJSON);
                 self.updateCommentModel(commentModel);
                 self.reRenderUpvotes(commentModel.id);
+
+                commentModel.userHasDownvoted = !commentModel.userHasDownvoted;
+                commentModel.downvoteCount = commentModel.downvoteCount--;
+                self.reRenderDownvotes(commentModel.id);
             };
 
             var error = function() {
@@ -1084,6 +1088,10 @@
                 var commentModel = self.createCommentModel(commentJSON);
                 self.updateCommentModel(commentModel);
                 self.reRenderDownvotes(commentModel.id);
+
+                commentModel.userHasUpvoted = !commentModel.userHasUpvoted;
+                commentModel.upvoteCount = commentModel.upvoteCount--;
+                self.reRenderUpvotes(commentModel.id);
             };
 
             var error = function () {
