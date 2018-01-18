@@ -545,6 +545,11 @@ http://viima.github.io/jquery-comments/*/
 	margin-bottom: .25em;
 }
 
+.jquery-comments ul.main li.comment .wrapper .content a.attachment > audio {
+    height: 32px;
+    width: 60%;
+}
+
 .jquery-comments ul.main li.comment .wrapper .content time.edited {
 	float: inherit;
 	margin: 0;
@@ -581,25 +586,29 @@ http://viima.github.io/jquery-comments/*/
 	margin-left: 0;
 }
 
-.jquery-comments ul.main li.comment .actions .action.upvote {
-	cursor: inherit;
+.jquery-comments ul.main li.comment .actions .action.upvote, .jquery-comments ul.main li.comment .actions .action.downvote {
+    cursor: inherit;
 }
 
-.jquery-comments ul.main li.comment .actions .action.upvote .upvote-count {
-	margin-right: .5em;
+.jquery-comments ul.main li.comment .actions .action.upvote .upvote-count, .jquery-comments ul.main li.comment .actions .action.downvote .downvote-count {
+    margin-right: .5em;
 }
 
-.jquery-comments ul.main li.comment .actions .action.upvote .upvote-count:empty {
-	display: none;
+.jquery-comments ul.main li.comment .actions .action.upvote .upvote-count:empty, .jquery-comments ul.main li.comment .actions .action.downvote .downvote-count:empty {
+    display: none;
 }
 
-.jquery-comments ul.main li.comment .actions .action.upvote i {
-	cursor: pointer;
+.jquery-comments ul.main li.comment .actions .action.upvote, .jquery-comments ul.main li.comment .actions .action.downvote {
+    cursor: pointer;
 }
 
-.jquery-comments ul.main li.comment .actions .action:not(.upvote):hover,
-.jquery-comments ul.main li.comment .actions .action.upvote:not(.highlight-font) i:hover {
-	color: #666;
+.jquery-comments ul.main li.comment .actions .action:not(.upvote):hover, .jquery-comments ul.main li.comment .actions .action:not(.downvote):hover,
+.jquery-comments ul.main li.comment .actions .action.upvote:not(.highlight-font) i:hover, .jquery-comments ul.main li.comment .actions .action.downvote:not(.red-highlight-font) i:hover {
+    color: #666;
+}
+
+.jquery-comments ul.main li.comment .actions .separator {
+    border-top: none;
 }
 
 .jquery-comments ul.main li.comment .actions .action.delete {
