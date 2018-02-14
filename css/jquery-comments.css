@@ -87,11 +87,11 @@ http://viima.github.io/jquery-comments/*/
 }
 
 .jquery-comments .profile-picture {
-	float: left;
-	width: 3.6rem;
-	height: 3.6rem;
-	max-width: 50px;
-	max-height: 50px;
+    float: left;
+    width: 3rem;
+    height: 3rem;
+    max-width: 50px;
+    max-height: 50px;
 }
 
 .jquery-comments i.profile-picture {
@@ -103,56 +103,50 @@ http://viima.github.io/jquery-comments/*/
 	border-radius: 50%;
 }
 
-.jquery-comments .commenting-field.main{
-	margin-bottom: 0.75em;
+.jquery-comments .commenting-field.main {
+    margin-bottom: 0.75em;
+    border: 1px solid #CCC;
+    border-radius: 3px;
+    background: #FFF;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
 }
 
-.jquery-comments .commenting-field.main .profile-picture {
-	margin-bottom: 1rem;
+.jquery-comments .commenting-field .profile-picture-wrapper, .jquery-comments .child-comments .commenting-field .profile-picture-wrapper {
+    float: left;
+    width: 5.6rem;
+    height: auto;
+    background: white;
+    position: relative;
+}
+
+.jquery-comments .commenting-field .profile-picture, .jquery-comments .child-comments .commenting-field .profile-picture {
+    top: 50%;
+    position: absolute;
+    margin: -1.5em 1em 0;
+}
+
+.jquery-comments .child-comments .commenting-field > .profile-picture-wrapper, .jquery-comments .child-comments .commenting-field > .textarea-wrapper .textarea {
+    border-top: none;
 }
 
 .jquery-comments .textarea-wrapper {
-	overflow: hidden;
-	padding-left: 15px;
-	position: relative;
-}
-
-.jquery-comments .textarea-wrapper:before {
-	content: " ";
-	position: absolute;
-	border: 5px solid #D5D5D5;
-	left: 5px;
-	top: 0;
-	width: 10px;
-	height: 10px;
-	box-sizing: border-box;
-	border-bottom-color: rgba(0, 0, 0, 0);
-	border-left-color: rgba(0, 0, 0, 0);
-}
-
-.jquery-comments .textarea-wrapper:after {
-	content: " ";
-	position: absolute;
-	border: 7px solid #FFF;
-	left: 7px;
-	top: 1px;
-	width: 10px;
-	height: 10px;
-	box-sizing: border-box;
-	border-bottom-color: rgba(0, 0, 0, 0);
-	border-left-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    position: relative;
 }
 
 .jquery-comments .textarea-wrapper .inline-button {
-	cursor: pointer;
-	right: 0;
-	z-index: 10;
-	position: absolute;
-	border: .5em solid rgba(0,0,0,0);
-	box-sizing: content-box;
-	font-size: inherit;
-	overflow: hidden;
-	opacity: 0.5;
+    height: 16px;
+    min-width: auto;
+    cursor: pointer;
+    right: 0;
+    z-index: 10;
+    position: absolute;
+    border: .5em solid rgba(0, 0, 0, 0);
+    box-sizing: content-box;
+    font-size: inherit;
+    overflow: hidden;
+    color: #999;
+    margin-right: .5em;
 
 	-webkit-user-select: none;
 	-moz-user-select: none;
@@ -160,8 +154,19 @@ http://viima.github.io/jquery-comments/*/
 	user-select: none;
 }
 
-.jquery-comments .textarea-wrapper .inline-button:hover {
-	opacity: 1;
+.jquery-comments .textarea-wrapper .upload.inline-button {
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.jquery-comments .textarea-wrapper .upload.inline-button:hover {
+    color: #666;
+    background: none;
+}
+
+.jquery-comments .textarea-wrapper .upload.inline-button > i {
+    vertical-align: top;
+    line-height: 16px;
 }
 
 .jquery-comments:not(.mobile) .scrollable .textarea-wrapper .inline-button {
@@ -169,7 +174,7 @@ http://viima.github.io/jquery-comments/*/
 }
 
 .jquery-comments .textarea-wrapper .upload.inline-button i {
-	font-size: 1.3em;
+    font-size: 1.5em;
 }
 
 .jquery-comments .textarea-wrapper .upload input {
@@ -185,8 +190,14 @@ http://viima.github.io/jquery-comments/*/
 }
 
 .jquery-comments .textarea-wrapper .close {
-	width: 1em;
-	height: 1em;
+    width: 1em;
+    height: 1em;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.jquery-comments .textarea-wrapper .close:hover {
+    color: #666;
 }
 
 .jquery-comments .textarea-wrapper .close span {
@@ -207,56 +218,61 @@ http://viima.github.io/jquery-comments/*/
 }
 
 .jquery-comments .textarea-wrapper .textarea {
-	margin: 0;
-	outline: 0;
-	overflow-y: auto;
-	cursor: text;
-
-	border: 1px solid #CCC;;
-	background: #FFF;
-	font-size: 1em;
-	line-height: 1.45em;
-	padding: .25em .8em;
-	padding-right: 2em;
+    margin: 0;
+    outline: 0;
+    overflow-y: auto;
+    cursor: text;
+    background: #FFF;
+    font-size: 1em;
+    line-height: 1.45em;
+    padding: 1em 2em 1em .5em;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
 .jquery-comments:not(.mobile) .scrollable .textarea-wrapper .textarea {
 	padding-right: calc(2em + 15px);	/* Because of scrollbar */
 }
 
-.jquery-comments .textarea-wrapper .control-row > span {
-	float: right;
-
-	color: #FFF;
-	padding: 0 1em;
-	font-size: 1em;
-	line-height: 1.6em;
-	margin-top: .4em;
-	border: 1px solid rgba(0, 0, 0, 0);
-	opacity: .5;
+.jquery-comments .textarea-wrapper .control-row > button {
+    float: right;
+    color: #FFF;
+    padding: 0 1em;
+    font-size: 1em;
+    line-height: 1.6em;
+    margin: .5em;
+    opacity: .5;
+    height: auto;
+    border: 1px solid;
+    border-radius: 5px;
 }
 
-.jquery-comments .textarea-wrapper .control-row > span:not(:first-child) {
-	margin-right: .5em;
+.jquery-comments .textarea-wrapper .control-row > button:not(:first-child) {
+    margin-right: .5em;
 }
 
-.jquery-comments .textarea-wrapper .control-row > span.enabled {
-	opacity: 1;
-	cursor: pointer;
+.jquery-comments .textarea-wrapper .control-row > button.enabled {
+    opacity: 1;
+    cursor: pointer;
 }
 
-.jquery-comments .textarea-wrapper .control-row > span:not(.enabled) {
-	pointer-events: none;
+.jquery-comments .textarea-wrapper .control-row > button:not(.enabled) {
+    pointer-events: none;
 }
 
-.jquery-comments .textarea-wrapper .control-row > span.enabled:hover {
-	opacity: .9;
+.jquery-comments .textarea-wrapper .control-row > button.enabled:hover {
+    opacity: .9;
 }
 
-.jquery-comments .textarea-wrapper .control-row > span.upload {
-	position: relative;
-	overflow: hidden;
-	background-color: #999;
+.jquery-comments .textarea-wrapper .control-row > button.upload {
+    position: relative;
+    overflow: hidden;
+    color: #999;
+}
+
+.jquery-comments .textarea-wrapper .control-row > button.upload i {
+    vertical-align: top;
+    margin-top: -2px;
 }
 
 .jquery-comments ul.navigation {
@@ -454,39 +470,75 @@ http://viima.github.io/jquery-comments/*/
 	clear: both;
 }
 
-.jquery-comments ul.main li.comment .comment-wrapper,
-.jquery-comments ul.main li.toggle-all,
-.jquery-comments ul.main li.comment .commenting-field {
-	padding: .5em;
+.jquery-comments ul.main > li.comment {
+    border: 1px solid #CCC;
+    border-radius: 3px;
+    position: relative;
+    margin-top: 2em;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+}
+
+.jquery-comments ul.main > li.comment:first-child {
+    margin-top: 1em;
+}
+
+.jquery-comments ul.main > li.comment:before {
+    content: '';
+    position: absolute;
+    top: -1em;
+    left: 1em;
+    width: 8em;
+    height: 2px;
+    background: #616161;
+}
+
+.jquery-comments ul.main > li.comment:first-child:before {
+    display: none;
 }
 
 .jquery-comments ul.main li.comment .comment-wrapper {
-	border-top: 1px solid #DDD;
-	overflow: hidden;
+    overflow: hidden;
+    background: white;
+    padding: 1em;
 }
 
-.jquery-comments ul.main > li.comment:first-child > .comment-wrapper {
-	border-top: none;
+.jquery-comments ul.main li.comment ul.child-comments li.comment .comment-wrapper {
+    border-top: 1px solid #CCC;
+}
+
+.jquery-comments ul.main li.comment .comment-wrapper > .comment-info-wrapper {
+    height: 4em;
+}
+
+.jquery-comments ul.main li.comment .comment-wrapper > .comment-info-wrapper .profile-picture-wrapper {
+    width: 3em;
+    height: 3em;
+    float: left;
+    margin-right: .5em;
 }
 
 .jquery-comments ul.main li.comment .comment-wrapper > .profile-picture {
 	margin-right: .5rem;
 }
 
-.jquery-comments ul.main li.comment time {
-	float: right;
-	line-height: 1.4em;
-	margin-left: .5em;
-	font-size: 0.8em;
-	color: #666;
+.jquery-comments ul.main li.comment .child-comments .comment-wrapper {
+    margin: 0;
+}
+
+.jquery-comments ul.main li.comment .time {
+    height: 16px;
+    line-height: 16px;
+    font-size: .8em;
+    color: #666;
 }
 
 .jquery-comments ul.main li.comment .name {
-	line-height: 1.4em;
-	font-weight: bold;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+    height: 24px;
+    line-height: 24px;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .jquery-comments ul.main li.comment .name a {
@@ -494,15 +546,21 @@ http://viima.github.io/jquery-comments/*/
 }
 
 .jquery-comments ul.main li.comment .name .reply-to {
-	color: #999;
-	font-size: .8em;
-	font-weight: normal;
-	vertical-align: top;
+    color: #999;
+    font-size: 12px;
+    font-weight: normal;
+    vertical-align: top;
+    background: #ccc;
+    border-radius: 10px;
+    margin: 0 1em;
+    padding: 0 1em 0 .5em;
 }
 
 .jquery-comments ul.main li.comment .name .reply-to i {
-	margin-left: .5em;
-	margin-right: .25em;
+    height: 24px;
+    line-height: 24px;
+    margin-left: .5em;
+    margin-right: .25em;
 }
 
 .jquery-comments ul.main li.comment .name .new {
@@ -537,12 +595,10 @@ http://viima.github.io/jquery-comments/*/
 }
 
 .jquery-comments ul.main li.comment .wrapper .content a.attachment > * {
-	max-width: 100%;
-	max-height: 200px;
-	width: auto;
-	height: auto;
-	margin-top: .25em;
-	margin-bottom: .25em;
+    max-width: 100%;
+    max-height: 200px;
+    width: auto;
+    height: auto;
 }
 
 .jquery-comments ul.main li.comment .wrapper .content a.attachment > audio {
@@ -568,29 +624,53 @@ http://viima.github.io/jquery-comments/*/
 	font-size: 1em;
 }
 
+.jquery-comments ul.main li.comment .actions {
+    margin-top: 1em;
+}
+
+.jquery-comments ul.main li.comment .mdl-button.action {
+    color: #2196F1;
+    font-weight: bold;
+    min-width: 0;
+    padding: 0 1em;
+    font-size: 1em;
+    line-height: 1.6em;
+    border: 1px solid;
+    border-radius: 5px;
+    height: auto;
+}
+
+.jquery-comments ul.main li.comment .actions button.mdl-button.action:hover {
+    color: #2196F1;
+}
+
 .jquery-comments ul.main li.comment .actions > * {
 	color: #999;
 	font-weight: bold;
 }
 
 .jquery-comments ul.main li.comment .actions .action {
-	display: inline-block;
-	cursor: pointer;
-	margin-left: 1em;
-	margin-right: 1em;
-	line-height: 1.5em;
-	font-size: 0.9em;
-}
-
-.jquery-comments ul.main li.comment .actions .action:first-child {
-	margin-left: 0;
+    display: inline-block;
+    cursor: pointer;
+    margin-right: 1em;
 }
 
 .jquery-comments ul.main li.comment .actions .action.upvote, .jquery-comments ul.main li.comment .actions .action.downvote {
     cursor: inherit;
+    float: right;
+}
+
+.jquery-comments ul.main li.comment .actions .action.upvote > *, .jquery-comments ul.main li.comment .actions .action.downvote > * {
+    line-height: 24px;
+}
+
+.jquery-comments ul.main li.comment .actions .action.upvote i, .jquery-comments ul.main li.comment .actions .action.downvote i {
+    font-size: 16px;
+    vertical-align: top;
 }
 
 .jquery-comments ul.main li.comment .actions .action.upvote .upvote-count, .jquery-comments ul.main li.comment .actions .action.downvote .downvote-count {
+    font-size: 14px;
     margin-right: .5em;
 }
 
@@ -633,28 +713,15 @@ http://viima.github.io/jquery-comments/*/
 	display: none;
 }
 
-
-/* Child comments */
-.jquery-comments ul.main li.comment .child-comments > *:before { /* Margin for second level content */
-	content: "";
-	height: 1px;
-	float: left;
-
-	width: calc(3.6em + .5em);	/* Profile picture width plus margin */
-	max-width: calc(50px + .5em);	/* Profile picture max width plus margin */
-}
-
-.jquery-comments ul.main li.comment .child-comments .profile-picture {
-	width: 2.4rem;
-	height: 2.4rem;
-}
-
 .jquery-comments ul.main li.comment .child-comments i.profile-picture {
 	font-size: 2.4em;
 }
 
+/* Child comments */
 .jquery-comments ul.main li.comment .child-comments li.toggle-all {
-	padding-top: 0;
+    background: white;
+    text-align: center;
+    border-top: 1px solid #CCC;
 }
 
 .jquery-comments ul.main li.comment .child-comments li.toggle-all span:first-child {
@@ -682,9 +749,12 @@ http://viima.github.io/jquery-comments/*/
 }
 
 .jquery-comments ul.main li.comment .child-comments li.toggle-all .caret.up {
-	border-top-color: rgba(0, 0, 0, 0);
-	border-bottom-color: inherit;
-	margin-top: -.2em;
+    border: .3em solid;
+    margin-top: -.3em;
+
+    border-left-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
 }
 
 .jquery-comments ul.main li.comment .child-comments .hidden-reply {
@@ -695,13 +765,23 @@ http://viima.github.io/jquery-comments/*/
 	display: inherit;
 }
 
+.jquery-comments ul.main li.comment .commenting-field {
+    background: #FFF;
+    border-top: 1px solid #CCC;
+}
+
 /* Editing comment */
 .jquery-comments ul.main li.comment.edit > .comment-wrapper > *:not(.commenting-field) {
 	display: none;
 }
 
 .jquery-comments ul.main li.comment.edit > .comment-wrapper .commenting-field {
-	padding: 0 !important;	/* Parent element has the padding */
+    padding: 0 !important; /* Parent element has the padding */
+    border: none;
+}
+
+.jquery-comments ul.main li.comment.edit > .comment-wrapper {
+    padding: 0;
 }
 
 /* Drag & drop attachments */
