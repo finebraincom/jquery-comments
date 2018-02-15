@@ -74,7 +74,7 @@
             // Edit mode actions
             'click .commenting-field .send.enabled': 'postComment',
             'click .commenting-field .update.enabled': 'putComment',
-            'click .commenting-field .delete.enabled': 'deleteComment',
+            // 'click .commenting-field .delete.enabled': 'deleteComment',
             'change .commenting-field .upload.enabled input[type="file"]': 'fileInputChanged',
 
             // Other actions
@@ -694,8 +694,8 @@
                     var pointsOfB = commentB.childs.length;
 
                     if (self.options.enableUpvoting) {
-                        pointsOfA += commentA.upvoteCount;
-                        pointsOfB += commentB.upvoteCount;
+                        pointsOfA += commentA.upvoteCount + commentA.downvoteCount;
+                        pointsOfB += commentB.upvoteCount + commentB.downvoteCount;
                     }
 
                     if (pointsOfB != pointsOfA) {
@@ -1190,7 +1190,7 @@
             textarea.attr('data-comment', commentModel.id);
 
             // Escaping HTML
-            textarea.append(this.getFormattedCommentContent(commentModel, true));
+            textarea.append(this.getFormattedCommentContent(commentModel.content, true));
 
             // Move cursor to end
             this.moveCursorToEnd(textarea);
@@ -1935,15 +1935,37 @@
 
                 // Case: regular comment
             } else {
-                // if (commentModel.content.length > 330) {
-                //     commentModel.content = commentModel.content.substring(0, 300);
-                //     toggleContent = $('<div/>', {
-                //         'class': 'toggle-content'
-                //     });
-                // } else {
-                //     toggleContent = null;
-                // }
-                content.html(this.getFormattedCommentContent(commentModel));
+                if (commentModel.content.length > 300) {
+                    var moreContent = commentModel.content.substr(300, commentModel.content.length - 1);
+                    if (moreContent.length > 50 && moreContent.indexOf('') > -1) {
+                        var html = this.getFormattedCommentContent(commentModel.content.substr(0, 300 + moreContent.indexOf(' '))) +
+                            '<span class="moreellipses">...</span><span class="morecontent"><span class="morelink readmore-' +
+                            commentModel.id + '">Show more >></span></span>';
+                        content.html(html);
+                    } else {
+                        content.html(this.getFormattedCommentContent(commentModel.content));
+                    }
+
+                    var contentElement = $('.comments-wrapper');
+                    contentElement.off("click", "span.readmore-" + commentModel.id);
+                    contentElement.on("click", "span.readmore-" + commentModel.id, _.bind(function (e) {
+                        var html;
+                        if ($(e.currentTarget).hasClass("less")) {
+                            html = this.getFormattedCommentContent(commentModel.content.substr(0, 300 + moreContent.indexOf(' '))) +
+                                '<span class="moreellipses">...</span><span class="morecontent"><span class="morelink readmore-'
+                                + commentModel.id + '">Show more >></span></span>';
+                            content.html(html);
+                        } else {
+                            html = this.getFormattedCommentContent(commentModel.content) + '<span class="less morelink readmore-' +
+                                commentModel.id + '">Show less >></span>';
+                            content.html(html);
+                        }
+                        return false;
+                    }, this));
+                } else {
+                    content.html(this.getFormattedCommentContent(commentModel.content));
+                }
+                // content.html(this.getFormattedCommentContent(commentModel));
             }
 
             // Edited timestamp
@@ -2324,11 +2346,11 @@
                 isAreaScrollable = textarea[0].scrollHeight > textarea.outerHeight();
                 maxRowsUsed = this.options.textareaMaxRows == false ?
                     false : rowCount > this.options.textareaMaxRows;
-                if (textarea.text().length > 0) {
-                    textarea.css({'display': 'flex', 'align-items': 'center', 'width': 'auto'});
-                } else {
-                    textarea.css({'display': 'table-cell', 'vertical-align': 'middle', 'width': '100em'});
-                }
+                // if (textarea.text().length > 0) {
+                //     textarea.css({'display': 'flex', 'align-items': 'center', 'width': 'auto'});
+                // } else {
+                //     textarea.css({'display': 'table-cell', 'vertical-align': 'middle', 'width': '100em'});
+                // }
             } while (isAreaScrollable && !maxRowsUsed);
         },
 
@@ -2363,10 +2385,10 @@
             return text;
         },
 
-        getFormattedCommentContent: function (commentModel, replaceNewLines) {
-            var html = this.escape(commentModel.content);
+        getFormattedCommentContent: function (commentContent, replaceNewLines) {
+            var html = this.escape(commentContent);
             html = this.linkify(html);
-            html = this.highlightTags(commentModel, html);
+            // html = this.highlightTags(commentModel, html);
             if (replaceNewLines) html = html.replace(/(?:\n)/g, '<br>');
             return html;
         },

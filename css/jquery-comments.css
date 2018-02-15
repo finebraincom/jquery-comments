@@ -60,7 +60,9 @@ http://viima.github.io/jquery-comments/*/
 .jquery-comments [contentEditable=true]:empty:not(:focus):before{
     content:attr(data-placeholder);
     color: #CCC;
-    position: inherit;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
 }
 
 .jquery-comments i.fa {
@@ -218,6 +220,7 @@ http://viima.github.io/jquery-comments/*/
 }
 
 .jquery-comments .textarea-wrapper .textarea {
+    position: relative;
     margin: 0;
     outline: 0;
     overflow-y: auto;
@@ -739,9 +742,9 @@ http://viima.github.io/jquery-comments/*/
 	width: 0;
 	height: 0;
 
-	margin-left: .5em;
-	border: .3em solid;
-	margin-top: .35em;
+    margin-left: .5em;
+    border: .3em solid;
+    margin-top: .3em;
 
 	border-left-color: rgba(0, 0, 0, 0);
 	border-bottom-color: rgba(0, 0, 0, 0);
@@ -827,4 +830,18 @@ http://viima.github.io/jquery-comments/*/
 }
 .jquery-comments.read-only .actions {
 	display: none;
+}
+
+.jquery-comments .morecontent span {
+    display: none;
+}
+
+.jquery-comments span.morelink {
+    display: block;
+    color: #2196F1;
+    cursor: pointer;
+}
+
+.jquery-comments span.morelink:hover {
+    text-decoration: underline;
 }
