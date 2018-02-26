@@ -178,6 +178,8 @@
                 textareaMaxRows: 5,
                 maxRepliesVisible: 2,
 
+                audioContext: null,
+
                 fieldMappings: {
                     id: 'id',
                     parent: 'parent',
@@ -185,6 +187,7 @@
                     modified: 'modified',
                     content: 'content',
                     file: 'file',
+                    fileName: 'file_name',
                     fileURL: 'file_url',
                     fileMimeType: 'file_mime_type',
                     pings: 'pings',
@@ -219,8 +222,6 @@
                 upvoteComment: function (commentJSON, success, error) {
                     success(commentJSON);
                 },
-
-
                 downvoteComment: function (commentJSON, success, error) {
                     success(commentJSON);
                 },
@@ -614,6 +615,7 @@
                     commentJSON.id += '-' + index;
                     commentJSON.content = '';
                     commentJSON.file = file;
+                    commentJSON.fileName = file.name;
                     commentJSON.fileURL = 'C:/fakepath/' + file.name;
                     commentJSON.fileMimeType = file.type;
 
@@ -1047,7 +1049,13 @@
         fileInputChanged: function (ev, filesDummy) {
             var files = ev.currentTarget.files;
             var commentingField = $(ev.currentTarget).parents('.commenting-field').first();
-            this.uploadAttachments(files, commentingField);
+            if (files[0]) {
+                if (files[0].size <= 2 * 1024 * 1000) {
+                    this.uploadAttachments(files, commentingField);
+                } else {
+                    window.alert("File size should be maximum 2MB.");
+                }
+            }
         },
 
         upvoteComment: function (ev) {
@@ -1252,7 +1260,15 @@
 
             // Hide the overlay and upload the files
             this.hideDroppableOverlay();
-            this.uploadAttachments(ev.originalEvent.dataTransfer.files);
+
+            var files = ev.originalEvent.dataTransfer.files;
+            if (files[0]) {
+                if (files[0].size <= 2 * 1024 * 1000) {
+                    this.uploadAttachments(ev.originalEvent.dataTransfer.files);
+                } else {
+                    window.alert("File size should be maximum 2MB.");
+                }
+            }
         },
 
         stopPropagation: function (ev) {
@@ -1893,12 +1909,66 @@
 
                     // Case: audio preview
                 } else if (type == 'audio') {
-                    var audio = $('<audio/>', {
+                    var audioSelector = $('<audio/>', {
                         src: commentModel.fileURL,
                         type: commentModel.fileMimeType,
                         controls: 'controls'
                     });
-                    link.html(audio);
+                    link.html(audioSelector);
+                    var canvasSelector = $('<canvas/>', {
+                        class: 'canvas-' + commentModel.id
+                    });
+                    link.prepend(canvasSelector);
+
+                    var audio = audioSelector.get(0);
+                    var canvas = canvasSelector.get(0);
+                    audio.crossOrigin = "anonymous";
+
+                    // var context = new AudioContext(); // getting context from app.js
+                    var src = this.options.audioContext.createMediaElementSource(audio);
+                    var analyser = this.options.audioContext.createAnalyser();
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    var ctx = canvas.getContext("2d");
+                    src.connect(analyser);
+                    analyser.connect(this.options.audioContext.destination);
+                    analyser.fftSize = 256;
+                    var bufferLength = analyser.frequencyBinCount;
+                    var dataArray = new Uint8Array(bufferLength);
+                    var WIDTH = canvas.width;
+                    var HEIGHT = canvas.height;
+                    var barWidth = (WIDTH / bufferLength) * 6;
+                    var barHeight;
+                    var x = 0;
+                    var stopRender = false;
+
+                    function renderFrame() {
+                        if (!stopRender) {
+                            requestAnimationFrame(renderFrame);
+                            x = 0;
+                            analyser.getByteFrequencyData(dataArray);
+                            ctx.fillStyle = "#FFF";
+                            ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+                            for (var i = 0; i < bufferLength; i++) {
+                                barHeight = dataArray[i] * 3;
+                                ctx.fillStyle = "#2196F1";
+                                ctx.fillRect(x, HEIGHT - barHeight, barWidth - 3, barHeight);
+                                x += barWidth + 1;
+                            }
+                        }
+                    }
+
+                    audioSelector.bind('play', function () {
+                        stopRender = false;
+                        renderFrame();
+                    });
+
+                    audioSelector.bind('ended', function () {
+                        setTimeout(function () {
+                            stopRender = true;
+                        }, 1000);
+                    });
 
                     // Case: icon and text
                 } else {
@@ -1914,6 +1984,12 @@
                         iconClass = 'fa fa-file-' + type + '-o';
                     }
 
+                    var fileName = commentModel.fileName;
+                    var attachmentWrapper = $('<div/>', {
+                        'class': 'attachment-wrapper',
+                        'text': fileName
+                    });
+
                     var fileIcon = $('<i/>', {
                         'class': iconClass
                     });
@@ -1923,13 +1999,14 @@
                     }
 
                     // File name
-                    var parts = commentModel.fileURL.split('/');
-                    var fileName = parts[parts.length - 1];
-                    fileName = fileName.split('?')[0];
-                    fileName = decodeURIComponent(fileName);
+                    // var parts = commentModel.fileURL.split('/');
+                    // var fileName = parts[parts.length - 1];
+                    // fileName = fileName.split('?')[0];
+                    // fileName = decodeURIComponent(fileName);
 
-                    link.text(fileName);
-                    link.prepend(fileIcon);
+                    attachmentWrapper.append(fileIcon);
+                    // link.text(fileName);
+                    link.prepend(attachmentWrapper);
                 }
                 content.html(link);
 
