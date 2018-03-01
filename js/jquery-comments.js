@@ -1053,6 +1053,7 @@
                 if (files[0].size <= 2 * 1024 * 1000) {
                     this.uploadAttachments(files, commentingField);
                 } else {
+                    $(ev.currentTarget).prop("value", "");
                     window.alert("File size should be maximum 2MB.");
                 }
             }
@@ -1885,10 +1886,8 @@
                 }
 
                 // Attachment link
-                var link = $('<a/>', {
-                    'class': 'attachment',
-                    href: commentModel.fileURL,
-                    target: '_blank'
+                var link = $('<div/>', {
+                    'class': 'attachment'
                 });
 
                 // Case: image preview
@@ -1915,13 +1914,11 @@
                         controls: 'controls'
                     });
                     link.html(audioSelector);
-                    var canvasSelector = $('<canvas/>', {
-                        class: 'canvas-' + commentModel.id
-                    });
+                    var canvasSelector = $('<canvas/>');
                     link.prepend(canvasSelector);
 
-                    var audio = audioSelector.get(0);
-                    var canvas = canvasSelector.get(0);
+                    var audio = audioSelector[0];
+                    var canvas = canvasSelector[0];
                     audio.crossOrigin = "anonymous";
 
                     // var context = new AudioContext(); // getting context from app.js
@@ -1940,7 +1937,7 @@
                     var barWidth = (WIDTH / bufferLength) * 6;
                     var barHeight;
                     var x = 0;
-                    var stopRender = false;
+                    var stopRender = true;
 
                     function renderFrame() {
                         if (!stopRender) {
@@ -1964,7 +1961,7 @@
                         renderFrame();
                     });
 
-                    audioSelector.bind('ended', function () {
+                    audioSelector.bind('pause ended', function () {
                         setTimeout(function () {
                             stopRender = true;
                         }, 1000);
