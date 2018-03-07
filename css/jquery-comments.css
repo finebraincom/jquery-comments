@@ -159,6 +159,7 @@ http://viima.github.io/jquery-comments/*/
 .jquery-comments .textarea-wrapper .upload.inline-button {
     top: 50%;
     transform: translate(0, -50%);
+    padding: 0;
 }
 
 .jquery-comments .textarea-wrapper .upload.inline-button:hover {
@@ -237,7 +238,7 @@ http://viima.github.io/jquery-comments/*/
 	padding-right: calc(2em + 15px);	/* Because of scrollbar */
 }
 
-.jquery-comments .textarea-wrapper .control-row > button {
+.jquery-comments .textarea-wrapper .control-row > div.mdl-button {
     float: right;
     color: #FFF;
     padding: 0 1em;
@@ -250,32 +251,32 @@ http://viima.github.io/jquery-comments/*/
     border-radius: 5px;
 }
 
-.jquery-comments .textarea-wrapper .control-row > button:not(:first-child) {
+.jquery-comments .textarea-wrapper .control-row > div.mdl-button:not(:first-child) {
     margin-right: .5em;
 }
 
-.jquery-comments .textarea-wrapper .control-row > button.enabled {
+.jquery-comments .textarea-wrapper .control-row > div.mdl-button.enabled {
     opacity: 1;
     cursor: pointer;
 }
 
-.jquery-comments .textarea-wrapper .control-row > button:not(.enabled) {
+.jquery-comments .textarea-wrapper .control-row > div.mdl-button:not(.enabled) {
     pointer-events: none;
 }
 
-.jquery-comments .textarea-wrapper .control-row > button.enabled:hover {
+.jquery-comments .textarea-wrapper .control-row > div.mdl-button.enabled:hover {
     opacity: .9;
 }
 
-.jquery-comments .textarea-wrapper .control-row > button.upload {
+.jquery-comments .textarea-wrapper .control-row > div.mdl-button.upload {
     position: relative;
     overflow: hidden;
     color: #999;
 }
 
-.jquery-comments .textarea-wrapper .control-row > button.upload i {
+.jquery-comments .textarea-wrapper .control-row > div.mdl-button.upload i {
     vertical-align: top;
-    margin-top: -2px;
+    font-size: 22px;
 }
 
 .jquery-comments ul.navigation {
@@ -593,7 +594,7 @@ http://viima.github.io/jquery-comments/*/
 	word-break: break-word;
 }
 
-.jquery-comments ul.main li.comment .wrapper .content div.attachment .attachment-wrapper {
+.jquery-comments ul.main li.comment .wrapper .content a.attachment .attachment-wrapper {
     display: inline-block;
     padding: 1em;
     background: #F5F5F5;
@@ -601,26 +602,26 @@ http://viima.github.io/jquery-comments/*/
     line-height: 3em;
 }
 
-.jquery-comments ul.main li.comment .wrapper .content div.attachment i {
+.jquery-comments ul.main li.comment .wrapper .content a.attachment i {
     font-size: 3em;
     vertical-align: middle;
     margin-right: 0.2em;
     float: left;
 }
 
-.jquery-comments ul.main li.comment .wrapper .content div.attachment > * {
+.jquery-comments ul.main li.comment .wrapper .content a.attachment > * {
     max-width: 100%;
     max-height: 200px;
     width: auto;
     height: auto;
 }
 
-.jquery-comments ul.main li.comment .wrapper .content div.attachment > audio {
+.jquery-comments ul.main li.comment .wrapper .content a.attachment > audio {
     height: 32px;
     width: 60%;
 }
 
-.jquery-comments ul.main li.comment .wrapper .content div.attachment > canvas {
+.jquery-comments ul.main li.comment .wrapper .content a.attachment > canvas {
     height: 128px;
     width: 60%;
 }
@@ -659,7 +660,7 @@ http://viima.github.io/jquery-comments/*/
     height: auto;
 }
 
-.jquery-comments ul.main li.comment .actions button.mdl-button.action:hover {
+.jquery-comments ul.main li.comment .actions div.mdl-button.action:hover {
     color: #2196F1;
 }
 

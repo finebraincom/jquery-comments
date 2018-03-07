@@ -80,14 +80,14 @@
             // Other actions
             'click li.comment button.upvote': 'upvoteComment',
             'click li.comment button.downvote': 'downvoteComment',
-            'click li.comment button.delete.enabled': 'deleteComment',
+            'click li.comment div.delete.enabled': 'deleteComment',
             'click li.comment .hashtag': 'hashtagClicked',
             'click li.comment .ping': 'pingClicked',
 
             // Other
             'click li.comment ul.child-comments .toggle-all': 'toggleReplies',
-            'click li.comment button.reply': 'replyButtonClicked',
-            'click li.comment button.edit': 'editButtonClicked',
+            'click li.comment div.reply': 'replyButtonClicked',
+            'click li.comment div.edit': 'editButtonClicked',
 
             // Drag & dropping attachments
             'dragenter': 'showDroppableOverlay',
@@ -1458,7 +1458,7 @@
                 saveButtonText = this.options.textFormatter(this.options.saveText);
 
                 // Delete button
-                var deleteButton = $('<button/>', {
+                var deleteButton = $('<div/>', {
                     'class': 'mdl-button delete',
                     text: this.options.textFormatter(this.options.deleteText)
                 }).css('color', this.options.deleteButtonColor);
@@ -1472,7 +1472,7 @@
 
                 // Add upload button if attachments are enabled
                 if (this.options.enableAttachments) {
-                    var uploadButton = $('<button/>', {
+                    var uploadButton = $('<div/>', {
                         'class': 'mdl-button enabled upload'
                     });
                     var uploadIcon = $('<i class="material-icons">attachment</i>');
@@ -1502,7 +1502,7 @@
 
             // Save button
             var saveButtonClass = existingCommentId ? 'update' : 'send';
-            var saveButton = $('<button/>', {
+            var saveButton = $('<div/>', {
                 'class': saveButtonClass + ' mdl-button save',
                 text: saveButtonText
             }).css('color', this.options.highlightColor);
@@ -1886,8 +1886,10 @@
                 }
 
                 // Attachment link
-                var link = $('<div/>', {
-                    'class': 'attachment'
+                var link = $('<a/>', {
+                    'class': 'attachment',
+                    href: commentModel.fileURL,
+                    target: '_blank'
                 });
 
                 // Case: image preview
@@ -2031,7 +2033,7 @@
                             content.html(html);
                         } else {
                             html = this.getFormattedCommentContent(commentModel.content) + '<span class="less morelink readmore-' +
-                                commentModel.id + '">Show less >></span>';
+                                commentModel.id + '">Show less <<</span>';
                             content.html(html);
                         }
                         return false;
@@ -2065,7 +2067,7 @@
             // });
 
             // Reply
-            var reply = $('<button/>', {
+            var reply = $('<div/>', {
                 'class': 'mdl-button action reply',
                 'type': 'button',
                 text: this.options.textFormatter(this.options.replyText)
@@ -2104,7 +2106,7 @@
 
                 // Case: delete button for attachment
                 if (isAttachment && this.isAllowedToDelete(commentModel.id)) {
-                    var deleteButton = $('<button/>', {
+                    var deleteButton = $('<div/>', {
                         'class': 'mdl-button action delete enabled',
                         text: this.options.textFormatter(this.options.deleteText)
                     });
@@ -2112,7 +2114,7 @@
 
                     // Case: edit button for regular comment
                 } else if (!isAttachment && this.options.enableEditing) {
-                    var editButton = $('<button/>', {
+                    var editButton = $('<div/>', {
                         'class': 'mdl-button action edit',
                         text: this.options.textFormatter(this.options.editText)
                     });
