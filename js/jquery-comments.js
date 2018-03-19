@@ -173,9 +173,9 @@
 
                 scrollContainer: this.$el,
                 roundProfilePictures: true,
-                textareaRows: 1,
-                textareaRowsOnFocus: 3,
-                textareaMaxRows: 5,
+                textareaRows: 3,
+                textareaRowsOnFocus: 5,
+                textareaMaxRows: 7,
                 maxRepliesVisible: 2,
 
                 audioContext: null,
@@ -1985,8 +1985,7 @@
 
                     var fileName = commentModel.fileName;
                     var attachmentWrapper = $('<div/>', {
-                        'class': 'attachment-wrapper',
-                        'text': fileName
+                        'class': 'attachment-wrapper'
                     });
 
                     var fileIcon = $('<i/>', {
@@ -1997,13 +1996,17 @@
                         fileIcon.addClass('image');
                     }
 
+                    var fileNameWrapper = $('<span/>', {
+                        'text': fileName
+                    });
+
                     // File name
                     // var parts = commentModel.fileURL.split('/');
                     // var fileName = parts[parts.length - 1];
                     // fileName = fileName.split('?')[0];
                     // fileName = decodeURIComponent(fileName);
 
-                    attachmentWrapper.append(fileIcon);
+                    attachmentWrapper.append(fileIcon).append(fileNameWrapper);
                     // link.text(fileName);
                     link.prepend(attachmentWrapper);
                 }
@@ -2402,13 +2405,13 @@
         },
 
         adjustTextareaHeight: function (textarea, focus) {
-            var textareaBaseHeight = 5;
-            var lineHeight = 1.5;
+            var textareaBaseHeight = 2;
+            // var lineHeight = 1;
             var profilePictureWrapper = textarea.parents().siblings(".profile-picture-wrapper").length > 0 ?
                 textarea.parents().siblings(".profile-picture-wrapper") : this.profilePictureWrapper;
 
             var setRows = function (rows) {
-                var height = textareaBaseHeight + (rows - 1) * lineHeight;
+                var height = textareaBaseHeight + rows;
                 textarea.css('height', height + 'em');
                 profilePictureWrapper.css('height', height + 'em');
             };
