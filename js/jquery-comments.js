@@ -103,7 +103,7 @@
             // Prevent propagating the click event into buttons under the autocomplete dropdown
             'click .dropdown.autocomplete': 'stopPropagation',
             'mousedown .dropdown.autocomplete': 'stopPropagation',
-            'touchstart .dropdown.autocomplete': 'stopPropagation',
+            'touchstart .dropdown.autocomplete': 'stopPropagation'
         },
 
 
