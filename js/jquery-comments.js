@@ -294,7 +294,7 @@
                         // Keep the context
                         method = $.proxy(method, this);
 
-                        if (selector == '') {
+                        if (selector === '') {
                             this.$el[bindFunction](eventName, method);
                         } else {
                             this.$el[bindFunction](eventName, selector, method);
@@ -503,7 +503,7 @@
 
                 // Force replies into one level only
                 var outerMostParent = directParentEl.parents('.comment').last();
-                if (outerMostParent.length == 0) outerMostParent = directParentEl;
+                if (outerMostParent.length === 0) outerMostParent = directParentEl;
 
                 // Append element to DOM
                 var childCommentsEl = outerMostParent.find('.child-comments');
@@ -590,7 +590,7 @@
 
                     // Close the commenting field if all the uploads were successfull
                     // and there's no content besides the attachment
-                    if (commentArray.length == fileCount && self.getTextareaContent(textarea).length == 0) {
+                    if (commentArray.length === fileCount && self.getTextareaContent(textarea).length === 0) {
                         commentingField.find('.close').trigger('click');
                     }
 
@@ -652,7 +652,7 @@
             hiddenReplies.addClass('hidden-reply');
 
             // Show all replies if replies are expanded
-            if (toggleAllButton.find('span.text').text() == this.options.textFormatter(this.options.hideRepliesText)) {
+            if (toggleAllButton.find('span.text').text() === this.options.textFormatter(this.options.hideRepliesText)) {
                 hiddenReplies.addClass('visible');
             }
 
@@ -690,7 +690,7 @@
             var self = this;
 
             // Sort by popularity
-            if (sortKey == 'popularity') {
+            if (sortKey === 'popularity') {
                 comments.sort(function (commentA, commentB) {
                     var pointsOfA = commentA.childs.length;
                     var pointsOfB = commentB.childs.length;
@@ -700,7 +700,7 @@
                         pointsOfB += commentB.upvoteCount + commentB.downvoteCount;
                     }
 
-                    if (pointsOfB != pointsOfA) {
+                    if (pointsOfB !== pointsOfA) {
                         return pointsOfB - pointsOfA;
 
                     } else {
@@ -716,7 +716,7 @@
                 comments.sort(function (commentA, commentB) {
                     var createdA = new Date(commentA.created).getTime();
                     var createdB = new Date(commentB.created).getTime();
-                    if (sortKey == 'oldest') {
+                    if (sortKey === 'oldest') {
                         return createdA - createdB;
                     } else {
                         return createdB - createdA;
@@ -760,7 +760,7 @@
 
             // Update title for dropdown
             var titleEl = this.$el.find('.navigation .title');
-            if (this.currentSortKey != 'attachments') {
+            if (this.currentSortKey !== 'attachments') {
                 titleEl.addClass('active');
                 titleEl.find('header').html(activeElements.first().html());
             } else {
@@ -785,7 +785,7 @@
 
         saveOnKeydown: function (ev) {
             // Save comment on cmd/ctrl + enter
-            if (ev.keyCode == 13) {
+            if (ev.keyCode === 13) {
                 var metaKey = ev.metaKey || ev.ctrlKey;
                 if (this.options.postCommentOnEnter || metaKey) {
                     var el = $(ev.currentTarget);
@@ -806,7 +806,7 @@
 
         checkEditableContentForChange: function (ev) {
             var el = $(ev.currentTarget);
-            if (el.data('before') != el.html()) {
+            if (el.data('before') !== el.html()) {
                 el.data('before', el.html());
                 el.trigger('change');
             }
@@ -817,7 +817,7 @@
             var sortKey = navigationEl.data().sortKey;
 
             // Sort the comments if necessary
-            if (sortKey != 'attachments') {
+            if (sortKey !== 'attachments') {
                 this.sortAndReArrangeComments(sortKey);
             }
 
@@ -897,13 +897,13 @@
             var contentOrParentChangedIfEditing = true;
             var content = this.getTextareaContent(textarea, true);
             commentId = textarea.attr('data-comment');
-            if (commentId) {
-                var contentChanged = content != this.commentsById[commentId].content;
+            if (commentId && this.commentsById[commentId]) {
+                var contentChanged = content !== this.commentsById[commentId].content;
                 var parentFromModel;
                 if (this.commentsById[commentId].parent) {
                     parentFromModel = this.commentsById[commentId].parent.toString();
                 }
-                var parentChanged = textarea.attr('data-parent') != parentFromModel;
+                var parentChanged = textarea.attr('data-parent') !== parentFromModel;
                 contentOrParentChangedIfEditing = contentChanged || parentChanged;
             }
 
@@ -1165,7 +1165,7 @@
             var previousParentId = replyField.find('.textarea').attr('data-parent');
 
             // Create the reply field (do not re-create)
-            if (previousParentId != parentId) {
+            if (previousParentId !== parentId) {
                 replyField = this.createCommentingFieldElement(parentId);
                 outermostParent.find('.child-comments').append(replyField);
 
@@ -1225,7 +1225,7 @@
             count--;
             $(ev.currentTarget).data('dnd-count', count);
 
-            if (count == 0) {
+            if (count === 0) {
                 $(ev.currentTarget).removeClass('drag-over');
                 if (callback) callback();
             }
@@ -1540,8 +1540,8 @@
                         // Users excluding self and already pinged users
                         var pings = self.getPings(textarea);
                         var users = self.getUsers().filter(function (user) {
-                            var isSelf = user.id == self.options.currentUserId;
-                            var alreadyPinged = pings.indexOf(user.id) != -1;
+                            var isSelf = user.id === self.options.currentUserId;
+                            var alreadyPinged = pings.indexOf(user.id) !== -1;
                             return !isSelf && !alreadyPinged;
                         });
 
@@ -1562,7 +1562,7 @@
                                 // Loop all words in the name and ensure that at least one of those starts with the search word
                                 $(wordsInName).each(function (index, wordInName) {
                                     var trimmedWordInName = wordInName.toLowerCase().trim();
-                                    if (trimmedWordInName.indexOf(trimmedSearchWord) == 0) trimmedSearchWordFound = true;
+                                    if (trimmedWordInName.indexOf(trimmedSearchWord) === 0) trimmedSearchWordFound = true;
                                 });
 
                                 // Mark search as failed if even one search word was not found in the name
@@ -1580,14 +1580,14 @@
                             'class': 'profile-picture round'
                         });
                         var detailsEl = $('<div/>', {
-                            'class': 'details',
+                            'class': 'details'
                         });
                         var nameEl = $('<div/>', {
-                            'class': 'name',
+                            'class': 'name'
                         }).html(user.fullname);
 
                         var emailEl = $('<div/>', {
-                            'class': 'email',
+                            'class': 'email'
                         }).html(user.email);
 
                         if (user.email) {
@@ -1603,12 +1603,12 @@
                     replace: function (user) {
                         var tag = self.createTagElement('@' + user.fullname, 'ping', user.id);
                         return ' ' + tag[0].outerHTML + ' ';
-                    },
+                    }
                 }], {
                     appendTo: '.jquery-comments',
                     dropdownClassName: 'dropdown autocomplete',
                     maxCount: 5,
-                    rightEdgeOffset: 0,
+                    rightEdgeOffset: 0
                 });
 
 
@@ -1871,7 +1871,7 @@
             });
 
             // Case: attachment
-            var isAttachment = commentModel.fileURL != undefined;
+            var isAttachment = commentModel.fileURL !== undefined;
             if (isAttachment) {
                 var format = null;
                 var type = null;
@@ -1879,7 +1879,7 @@
                 // Type and format
                 if (commentModel.fileMimeType) {
                     var mimeTypeParts = commentModel.fileMimeType.split('/');
-                    if (mimeTypeParts.length == 2) {
+                    if (mimeTypeParts.length === 2) {
                         format = mimeTypeParts[1];
                         type = mimeTypeParts[0];
                     }
@@ -1893,14 +1893,14 @@
                 });
 
                 // Case: image preview
-                if (type == 'image') {
+                if (type === 'image') {
                     var image = $('<img/>', {
                         src: commentModel.fileURL
                     });
                     link.html(image);
 
                     // Case: video preview
-                } else if (type == 'video') {
+                } else if (type === 'video') {
                     var video = $('<video/>', {
                         src: commentModel.fileURL,
                         type: commentModel.fileMimeType,
@@ -1909,7 +1909,7 @@
                     link.html(video);
 
                     // Case: audio preview
-                } else if (type == 'audio') {
+                } else if (type === 'audio') {
                     var audioSelector = $('<audio/>', {
                         src: commentModel.fileURL,
                         type: commentModel.fileMimeType,
@@ -2014,48 +2014,48 @@
 
                 // Case: regular comment
             } else {
+                var html;
                 if (commentModel.content.length > 300) {
-                    var moreContent = commentModel.content.substr(300, commentModel.content.length - 1);
-                    if (moreContent.length > 50 && moreContent.indexOf('') > -1) {
-                        var html = this.getFormattedCommentContent(commentModel.content.substr(0, 300 + moreContent.indexOf(' '))) +
-                            '<span class="moreellipses">...</span><span class="morecontent"><span class="morelink readmore-' +
-                            commentModel.id + '">Show more >></span></span>';
-                        content.html(html);
-                    } else {
-                        content.html(this.getFormattedCommentContent(commentModel.content));
-                    }
+                    var moreContent = commentModel.content.substr(250, commentModel.content.length - 1);
+                    html = this.getFormattedCommentContent(commentModel.content.substr(0, 250 + moreContent.indexOf(' '))) +
+                        '...<span class="read-more-content"><span class="read-more-link read-more-' +
+                        commentModel.id + '">Show more >></span></span>';
+                    content.html(html);
 
-                    var contentElement = $('.comments-wrapper');
-                    contentElement.off("click", "span.readmore-" + commentModel.id);
-                    contentElement.on("click", "span.readmore-" + commentModel.id, _.bind(function (e) {
+                    var contentElement = $('.comments-container');
+                    contentElement.off("click", "span.read-more-" + commentModel.id);
+                    contentElement.on("click", "span.read-more-" + commentModel.id, _.bind(function (e) {
                         var html;
                         if ($(e.currentTarget).hasClass("less")) {
                             html = this.getFormattedCommentContent(commentModel.content.substr(0, 300 + moreContent.indexOf(' '))) +
-                                '<span class="moreellipses">...</span><span class="morecontent"><span class="morelink readmore-'
+                                '...<span class="read-more-content"><span class="read-more-link read-more-'
                                 + commentModel.id + '">Show more >></span></span>';
                             content.html(html);
                         } else {
-                            html = this.getFormattedCommentContent(commentModel.content) + '<span class="less morelink readmore-' +
-                                commentModel.id + '">Show less <<</span>';
+                            html = '<span class="comment-content">' + this.getFormattedCommentContent(commentModel.content) +
+                                '</span><span class="less read-more-link read-more-' + commentModel.id +
+                                '">Show less <<</span><span class="translate-link">Show translation</span>';
                             content.html(html);
                         }
                         return false;
                     }, this));
                 } else {
-                    content.html(this.getFormattedCommentContent(commentModel.content));
+                    html = '<span class="comment-content">' + this.getFormattedCommentContent(commentModel.content) +
+                        '</span><span class="translate-link">Show translation</span>';
+                    content.html(html);
                 }
                 // content.html(this.getFormattedCommentContent(commentModel));
             }
 
             // Edited timestamp
-            if (commentModel.modified && commentModel.modified != commentModel.created) {
+            if (commentModel.modified && commentModel.modified !== commentModel.created) {
                 var editedTime = this.options.timeFormatter(commentModel.modified);
                 var edited = $('<time/>', {
                     'class': 'edited',
                     text: this.options.textFormatter(this.options.editedText) + ' ' + editedTime,
                     'data-original': commentModel.modified
                 });
-                content.append(edited);
+                content.children().first().after(edited);
             }
 
             // Actions
@@ -2194,7 +2194,7 @@
             var tagEl = $('<input/>', {
                 'class': 'tag',
                 'type': 'button',
-                'data-role': 'none',
+                'data-role': 'none'
             });
             if (extraClasses) tagEl.addClass(extraClasses);
             tagEl.val(text);
@@ -2317,13 +2317,13 @@
 
         getChildComments: function (parentId) {
             return this.getComments().filter(function (comment) {
-                return comment.parent == parentId;
+                return comment.parent === parentId;
             });
         },
 
         getAttachments: function () {
             return this.getComments().filter(function (comment) {
-                return comment.fileURL != undefined;
+                return comment.fileURL !== undefined;
             });
         },
 
@@ -2362,7 +2362,7 @@
                 var isAllowedToDelete = true;
                 if (!this.options.enableDeletingCommentWithReplies) {
                     $(this.getComments()).each(function (index, comment) {
-                        if (comment.parent == commentId) isAllowedToDelete = false;
+                        if (comment.parent === commentId) isAllowedToDelete = false;
                     });
                 }
                 return isAllowedToDelete;
@@ -2387,7 +2387,7 @@
             if (toggle) {
 
                 // Toggle text
-                if (textContainer.text() == hideRepliesText) {
+                if (textContainer.text() === hideRepliesText) {
                     showExpandingText();
                 } else {
                     textContainer.text(hideRepliesText);
@@ -2398,7 +2398,7 @@
             } else {
 
                 // Update text if necessary
-                if (textContainer.text() != hideRepliesText) {
+                if (textContainer.text() !== hideRepliesText) {
                     showExpandingText();
                 }
             }
@@ -2423,7 +2423,7 @@
                 setRows(rowCount);
                 rowCount++;
                 isAreaScrollable = textarea[0].scrollHeight > textarea.outerHeight();
-                maxRowsUsed = this.options.textareaMaxRows == false ?
+                maxRowsUsed = this.options.textareaMaxRows === false ?
                     false : rowCount > this.options.textareaMaxRows;
                 // if (textarea.text().length > 0) {
                 //     textarea.css({'display': 'flex', 'align-items': 'center', 'width': 'auto'});
@@ -2488,14 +2488,14 @@
             $(el).scrollTop(el.scrollHeight);
 
             // Move cursor to end
-            if (typeof window.getSelection != 'undefined' && typeof document.createRange != 'undefined') {
+            if (typeof window.getSelection !== 'undefined' && typeof document.createRange !== 'undefined') {
                 var range = document.createRange();
                 range.selectNodeContents(el);
                 range.collapse(false);
                 var sel = window.getSelection();
                 sel.removeAllRanges();
                 sel.addRange(range);
-            } else if (typeof document.body.createTextRange != 'undefined') {
+            } else if (typeof document.body.createTextRange !== 'undefined') {
                 var textRange = document.body.createTextRange();
                 textRange.moveToElementText(el);
                 textRange.collapse(false);
@@ -2518,7 +2518,7 @@
             var self = this;
             return function () {
                 times--;
-                if (times == 0) {
+                if (times === 0) {
                     return func.apply(self, arguments);
                 }
             };
@@ -2533,7 +2533,7 @@
         highlightHashtags: function (commentModel, html) {
             var self = this;
 
-            if (html.indexOf('#') != -1) {
+            if (html.indexOf('#') !== -1) {
 
                 var __createTag = function (tag) {
                     var tagElement = self.createTagElement('#' + tag, 'hashtag', tag);
@@ -2551,7 +2551,7 @@
         highlightPings: function (commentModel, html) {
             var self = this;
 
-            if (html.indexOf('@') != -1) {
+            if (html.indexOf('@') !== -1) {
 
                 var __createTag = function (user) {
                     var tag = self.createTagElement('@' + user.fullname, 'ping', user.id);

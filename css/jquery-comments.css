@@ -244,6 +244,7 @@ http://viima.github.io/jquery-comments/*/
     position: relative;
     margin: 0;
     outline: 0;
+    overflow-y: auto;
     cursor: text;
     background: #FFF;
     font-size: 16px;
@@ -251,8 +252,6 @@ http://viima.github.io/jquery-comments/*/
     padding: 1em 2em 1em .5em;
     white-space: pre-wrap;
     word-break: break-word;
-    overflow: hidden;
-    overflow-y: auto;
 }
 
 .jquery-comments:not(.mobile) .scrollable .textarea-wrapper .textarea {
@@ -885,18 +884,18 @@ http://viima.github.io/jquery-comments/*/
     display: none;
 }
 
-.jquery-comments .morecontent span {
+.jquery-comments .read-more-content span {
     display: none;
 }
 
-.jquery-comments span.morelink {
+.jquery-comments span.read-more-link, .jquery-comments span.translate-link {
     display: table;
     color: #2196F1;
     cursor: pointer;
 }
 
 @media (min-width: 600px) {
-    .jquery-comments span.morelink:hover {
+    .jquery-comments span.read-more-link:hover, .jquery-comments span.translate-link:hover {
         text-decoration: underline;
     }
 }
