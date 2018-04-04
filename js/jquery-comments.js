@@ -2027,7 +2027,7 @@
                     contentElement.on("click", "span.read-more-" + commentModel.id, _.bind(function (e) {
                         var html;
                         if ($(e.currentTarget).hasClass("less")) {
-                            html = this.getFormattedCommentContent(commentModel.content.substr(0, 300 + moreContent.indexOf(' '))) +
+                            html = this.getFormattedCommentContent(commentModel.content.substr(0, 250 + moreContent.indexOf(' '))) +
                                 '...<span class="read-more-content"><span class="read-more-link read-more-'
                                 + commentModel.id + '">Show more >></span></span>';
                             content.html(html);

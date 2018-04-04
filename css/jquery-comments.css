@@ -126,7 +126,7 @@ http://viima.github.io/jquery-comments/*/
 
 .jquery-comments .commenting-field .profile-picture-wrapper, .jquery-comments .child-comments .commenting-field .profile-picture-wrapper {
     float: left;
-    width: 5.6rem;
+    width: 5.6em;
     height: auto;
     background: white;
     position: relative;
@@ -542,7 +542,7 @@ http://viima.github.io/jquery-comments/*/
 }
 
 .jquery-comments ul.main li.comment .comment-wrapper > .profile-picture {
-    margin-right: .5rem;
+    margin-right: .5em;
 }
 
 .jquery-comments ul.main li.comment .child-comments .comment-wrapper {
@@ -647,12 +647,24 @@ http://viima.github.io/jquery-comments/*/
 
 .jquery-comments ul.main li.comment .wrapper .content a.attachment > audio {
     height: 32px;
-    width: 60%;
+    width: 100%;
+}
+
+@media (min-width: 600px) {
+    .jquery-comments ul.main li.comment .wrapper .content a.attachment > audio {
+        width: 60%;
+    }
 }
 
 .jquery-comments ul.main li.comment .wrapper .content a.attachment > canvas {
     height: 128px;
-    width: 60%;
+    width: 100%;
+}
+
+@media (min-width: 600px) {
+    .jquery-comments ul.main li.comment .wrapper .content a.attachment > canvas {
+        width: 60%;
+    }
 }
 
 .jquery-comments ul.main li.comment .wrapper .content time.edited {
@@ -892,6 +904,7 @@ http://viima.github.io/jquery-comments/*/
     display: table;
     color: #2196F1;
     cursor: pointer;
+    padding-top: .25em;
 }
 
 @media (min-width: 600px) {
