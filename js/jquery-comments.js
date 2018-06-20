@@ -144,6 +144,7 @@
                 newText: 'New',
                 viewAllRepliesText: 'View all __replyCount__ replies',
                 hideRepliesText: 'Hide replies',
+                loadMoreText: 'Load more',
                 noCommentsText: 'No comments',
                 noAttachmentsText: 'No attachments',
                 attachmentDropText: 'Drop files here',
@@ -178,6 +179,10 @@
                 textareaMaxRows: 7,
                 maxRepliesVisible: 2,
 
+                start: 0,
+                count: 20,
+                commentsCount: 0,
+                commentsLoaded: [],
                 audioContext: null,
 
                 fieldMappings: {
@@ -308,8 +313,11 @@
         // Basic functionalities
         // =====================
 
-        fetchDataAndRender: function () {
+        fetchDataAndRender: function (loadMore) {
             var self = this;
+            if (loadMore) {
+                this.options.start += this.options.count;
+            }
 
             this.commentsById = {};
             this.usersById = {};
@@ -327,6 +335,11 @@
             // ========
 
             var commentsFetched = function (commentsArray) {
+                if (self.options.commentsLoaded.length > 0) {
+                    Array.prototype.push.apply(commentsArray, self.options.commentsLoaded);
+                }
+                self.options.commentsLoaded = commentsArray;
+
                 // Convert comments to custom data model
                 var commentModels = commentsArray.map(function (commentsJSON) {
                     return self.createCommentModel(commentsJSON);
@@ -341,8 +354,12 @@
                 });
 
                 dataFetched();
+
+                if (self.options.start + self.options.count < self.options.commentsCount) {
+                    self.$el.find('.load-more').show();
+                }
             };
-            this.options.getComments(commentsFetched, dataFetched);
+            this.options.getComments(commentsFetched, dataFetched, this.options.start, this.options.count);
 
             // Users
             // =====
@@ -1308,6 +1325,12 @@
                 'data-container': 'comments'
             });
             this.$el.append(commentsContainer);
+
+            var loadMore = $('<div/>', {
+                'class': 'mdl-button mdl-button--colored load-more',
+                text: this.options.textFormatter(this.options.loadMoreText)
+            });
+            commentsContainer.append(loadMore);
 
             // "No comments" placeholder
             var noComments = $('<div/>', {
@@ -2656,11 +2679,16 @@
 
     };
 
+    var comments;
     $.fn.comments = function (options) {
         return this.each(function () {
-            var comments = Object.create(Comments);
+            comments = Object.create(Comments);
             $.data(this, 'comments', comments);
             comments.init(options || {}, this);
         });
+    };
+
+    $.fn.loadMore = function () {
+        comments.fetchDataAndRender(true);
     };
 }));
