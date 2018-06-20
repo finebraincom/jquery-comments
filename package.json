@@ -21,8 +21,8 @@
     "discussion",
     "conversation"
   ],
-  "scripts" : {
-     "minify" : "minify js/jquery-comments.js"
+  "scripts": {
+    "minify": "minify js/jquery-comments.js > js/jquery-comments.min.js"
   },
   "repository": {
     "type": "git",
