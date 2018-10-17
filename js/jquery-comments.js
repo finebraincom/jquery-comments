@@ -163,6 +163,7 @@
                 enablePinging: false,
                 enableDeletingCommentWithReplies: false,
                 enableNavigation: true,
+                enableTranslation: true,
                 postCommentOnEnter: false,
                 forceResponsive: false,
                 readOnly: false,
@@ -2057,14 +2058,19 @@
                         } else {
                             html = '<span class="comment-content">' + this.getFormattedCommentContent(commentModel.content) +
                                 '</span><span class="less read-more-link read-more-' + commentModel.id +
-                                '">Show less <<</span><span class="translate-link">Show translation</span>';
+                                '">Show less <<</span>';
+                            if (this.options.enableTranslation) {
+                                html += '<span class="translate-link">Show translation</span>';
+                            }
                             content.html(html);
                         }
                         return false;
                     }, this));
                 } else {
-                    html = '<span class="comment-content">' + this.getFormattedCommentContent(commentModel.content) +
-                        '</span><span class="translate-link">Show translation</span>';
+                    html = '<span class="comment-content">' + this.getFormattedCommentContent(commentModel.content) + '</span>';
+                    if (this.options.enableTranslation) {
+                        html += '<span class="translate-link">Show translation</span>';
+                    }
                     content.html(html);
                 }
                 // content.html(this.getFormattedCommentContent(commentModel));
